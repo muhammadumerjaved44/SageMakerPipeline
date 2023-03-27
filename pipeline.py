@@ -175,7 +175,7 @@ def define_pipeline():
     # model_step.add_depends_on([step_train])
     pipeline = Pipeline(
         name=f"pod-pipeline-dev-{int(datetime.datetime.now().timestamp())}",
-        steps=[step_process, step_train, step_register_pipeline_model], #step_train, step_register_pipeline_model
+        steps=[step_process], #step_train, step_register_pipeline_model
         sagemaker_session=local_pipeline_session,
     )
 
@@ -212,16 +212,19 @@ def delete_pipeline(pipeline):
     return pipeline
 
 def main_pipeline():
-    pipeline = define_pipeline()
-    execution, pipeline = run_pipeline(pipeline)
+    try:
+        pipeline = define_pipeline()
+        execution, pipeline = run_pipeline(pipeline)
 
-    for step in execution.list_steps():
-        if step['StepStatus'] == 'Succeeded':
-            print(f"Step = {step['StepName']} run successfully and status is = {step['StepStatus']}")
-        else:
-            raise Exception(f"Pipeline failed at this step = {step['StepName']} haveing status = {step['StepStatus']}")
+        for step in execution.list_steps():
+            if step['StepStatus'] == 'Succeeded':
+                print(f"Step = {step['StepName']} run successfully and status is = {step['StepStatus']}")
+            else:
+                raise Exception(f"Pipeline failed at this step = {step['StepName']} haveing status = {step['StepStatus']}")
 
-    return True
+        return True
+    except Exception as e:
+        return False
 
 
 

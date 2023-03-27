@@ -14,3 +14,14 @@ except:
 
 class PodModel(DynamicDocument):
     meta = {"collection": "poddocs"}
+
+
+
+
+class SignaturiesModel(DynamicDocument):
+    meta = {"collection": "signaturies"}
+
+
+
+class TrainedSignaturiesModel(DynamicDocument):
+    meta = {"collection": "trained_signaturies"}

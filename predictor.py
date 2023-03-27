@@ -5,6 +5,7 @@ import numpy as np
 from keras.applications.vgg16 import VGG16, preprocess_input
 from keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.preprocessing import image
+from sagemaker.predictor import Predictor
 
 try:
     BASE_DIR = Path(__file__).resolve().parent
@@ -39,7 +40,7 @@ def image_file_to_tensor(
 
 headers = {"ContentType": "application/json"}
 data = image_file_to_tensor()
-from sagemaker.predictor import Predictor
+
 
 endpoint_name = "pod-endpoint"
 endpoint_name = "test-pod"

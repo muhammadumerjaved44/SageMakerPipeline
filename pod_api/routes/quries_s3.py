@@ -4,6 +4,7 @@ from urllib.parse import urlparse
 import boto3
 from config import settings
 import subprocess
+from pathlib import Path
 
 S3_BUCKET_NODE = settings.S3_BUCKET_NODE
 
@@ -92,3 +93,28 @@ def empty_s3_folder(bucket_name='winsport-signatures-dev', folder_name='dataset'
         print(f"Emptied folder {folder_name} in S3 bucket {bucket_name}")
     else:
         print(f"Folder {folder_name} in S3 bucket {bucket_name} is already empty")
+
+
+def move_file_s3(src_bucket, src_file, dst_bucket, dst_file):
+    # Create an S3 client
+    s3 = boto3.client('s3')
+
+    # Copy the file
+    s3.copy_object(Bucket=dst_bucket, CopySource={'Bucket': src_bucket, 'Key': src_file}, Key=dst_file)
+
+    # Delete the original file from the source bucket
+    # s3.delete_object(Bucket=src_bucket, Key=src_file)
+
+# Example usage
+
+
+def resolve_s3_path(url):
+    path = urlparse(url)
+    s3_key = path.path.lstrip("/")
+    s3_uri = f"s3://{S3_BUCKET_NODE}/{s3_key}"
+    file_path = Path(path.path)
+    extention = file_path.suffix.lower()
+    file_name = file_path.name
+    return url, s3_key, s3_uri, extention, file_name
+
+
