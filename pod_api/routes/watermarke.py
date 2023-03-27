@@ -31,6 +31,7 @@ from routes.quries_s3 import (
     get_s3_object_url,
     upload_image_to_s3,
     upload_pdf_to_s3,
+    resolve_s3_path
 )
 from routes.utils import exception_callback
 from sqlalchemy.orm import Session
@@ -51,14 +52,7 @@ S3_BUCKET_NODE = settings.S3_BUCKET_NODE
 router = APIRouter()
 
 
-def resolve_s3_path(url):
-    path = urlparse(url)
-    s3_key = path.path.lstrip("/")
-    s3_uri = f"s3://{S3_BUCKET_NODE}/{s3_key}"
-    file_path = Path(path.path)
-    extention = file_path.suffix.lower()
-    file_name = file_path.name
-    return url, s3_key, s3_uri, extention, file_name
+
 
 
 def new_page(text):
@@ -175,15 +169,15 @@ def apply_watermark(pod_id):
         if "pod" in url:
             # data = {"podPath": url}
             new_file_urls["podPath"] = url
-            new_file_urls["isWaterMarked"] = True
+            new_file_urls["isdocWaterMarked"] = True
         if "bol" in url:
             # data = {"bolPath": url}
             new_file_urls["bolPath"] = url
-            new_file_urls["isWaterMarked"] = True
+            new_file_urls["isdocWaterMarked"] = True
         if "invoice" in url:
             # data = {"invoicePath": url}
             new_file_urls["invoicePath"] = url
-            new_file_urls["isWaterMarked"] = True
+            new_file_urls["isdocWaterMarked"] = True
 
     update_pod_watermark_url(pod_id, new_file_urls)
 

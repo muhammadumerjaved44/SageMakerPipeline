@@ -12,7 +12,7 @@ app = FastAPI(title=settings.PROJECT_NAME)
 
 app.include_router(predictions.router, prefix="/predictions", tags=["predictions"])
 app.include_router(watermarke.router, prefix="/watermarke", tags=["watermarke"])
-app.include_router(training.router, prefix="/training", tags=["training"])
+app.include_router(training.router, prefix="/model", tags=["training"])
 # app.include_router(users.router, prefix="/users", tags=["users"])
 
 
